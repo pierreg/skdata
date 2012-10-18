@@ -226,8 +226,8 @@ class INRIAPerson(object):
                 b_min, b_max = line.split(":")[1].split(' - ')
                 b_min = b_min.strip()
                 b_max = b_max.strip()
-                x_min, y_min = box(b_min)
-                x_max, y_max = box(b_max)
+                y_min, x_min = box(b_min)
+                y_max, x_max = box(b_max)
                 # t = (y2 - y1) / 4
                 # bboxes.append((x1-t, y1-t, x2+t, y2+t))
 
