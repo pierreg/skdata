@@ -17,6 +17,7 @@ from glob import glob
 import hashlib
 
 import numpy as np
+import cv2
 
 from data_home import get_data_home
 from utils import download, extract, xml2dict
@@ -51,7 +52,7 @@ class UIUCCar(object):
                     name: str
                         Name (label) of the object.
 
-                    bounding_box: None
+                    bounding_box: tuple
                         bounding boxes are not tight for this dataset
                         PASCAL VOC has tight bounding boxes
 
@@ -169,8 +170,15 @@ class UIUCCar(object):
             # -- get split
             data['split'] = "train"
 
+            # -- get bounding box and image size
+            im = cv2.imread(img_filename)
+            data['shape'] = {"depth": im.shape[2], "height": im.shape[0],
+                             "width": im.shape[1]}
+
             # -- get annotation filename
-            data['objects'] = [{"name": "car"}]
+            bounding_box = {"x_min": 0, "y_min": 0, "x_max": im.shape[1], 
+                            "y_max": im.shape[0]}
+            data['objects'] = [{"name": "car", "bounding_box": bounding_box}]
 
             # -- print progress
             n_done = i + 1
