@@ -17,6 +17,7 @@ from glob import glob
 import hashlib
 
 import numpy as np
+import cv2
 
 from data_home import get_data_home
 from utils import download, extract, xml2dict
@@ -194,6 +195,11 @@ class INRIAPerson(object):
             # -- get split
             split = img_filename.split("/")[-3]
             data['split'] = split.lower()
+
+            # -- get bounding box and image size
+            im = cv2.imread(img_filename)
+            data['shape'] = {"depth": im.shape[2], "height": im.shape[0],
+                             "width": im.shape[1]}
 
             # -- get annotation filename
             data['objects'] = []
