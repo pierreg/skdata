@@ -71,25 +71,6 @@ class INRIAPerson(object):
                         ▼
                         y-axis
 
-                    pose: str
-                        'Left', 'Right', 'Frontal', 'Rear' or 'Unspecified'
-
-                    truncated: boolean
-                        True if the object is occluded / truncated.
-
-                    difficult: boolean
-                        True if the object has been tagged as difficult (should
-                        be ignored during evaluation?).
-
-            segmented: boolean
-                True if segmentation information is available.
-
-            owner: dict [optional]
-                Owner of the image (self-explanatory).
-
-            source: dict
-                Source of the image (self-explanatory).
-
 
     Notes
     -----
