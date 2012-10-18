@@ -40,12 +40,8 @@ class INRIAPerson(object):
             sha1: str
                 SHA-1 hash of the image.
 
-            shape: dict with int values
-                Shape of the image. dict with keys 'height', 'width', 'depth'
-                and int values.
-
             split: str
-                'train', 'val' or 'test'.
+                'train', 'test'.
 
             objects: list of dict [optional]
                 Description of the objects present in the image. Note that this
