@@ -87,7 +87,8 @@ class INRIAPerson(object):
         },
     }
 
-    def __init__(self, meta=None):
+    def __init__(self, meta=None, augment=False):
+        self.augment = augment
         if meta is not None:
             self._meta = meta
 
@@ -233,9 +234,19 @@ class INRIAPerson(object):
 
                 obj = dict(bounding_box = dict(x_min=x_min, x_max=x_max,
                                                y_min=y_min, y_max=y_max),
-                           name="person")
+                           name="person",
+                           pose="full")
                 data['objects'] += [obj]
                 n_objects += 1
+
+                if self.augment:
+                    y_max = y_min + (y_max - y_min) / 3
+                    obj = dict(bounding_box = dict(x_min=x_min, x_max=x_max,
+                                                   y_min=y_min, y_max=y_max),
+                               name="person",
+                               pose="head_and_shoulders")
+                    data['objects'] += [obj]
+                    n_objects += 1
 
             # -- print progress
             n_done = i + 1
