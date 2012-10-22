@@ -295,9 +295,9 @@ class OxfordPet(object):
             segmented = bool(xd['segmented'])
             data['segmented'] = segmented
             if segmented:
-                # TODO: parse segmentation data (in 'SegmentationClass') or
-                # lazy-evaluate it ?
-                pass
+                data["filename_segmented"] = path.join(self.home(), 
+                                                       "annotations", 
+                                                       "trimaps", img_id+".png")
 
             # objects with their bounding boxes
             objs = xd['object']
