@@ -3,8 +3,7 @@
 
 # License: Simplified BSD
 
-from copy import deepcopy
-import logging; logger = logging.getLogger(__name__)
+import logging
 
 import numpy as np
 
@@ -13,6 +12,8 @@ from skdata.utils import ImgLoader
 from skdata.larray import lmap
 
 import dataset
+
+logger = logging.getLogger(__name__)
 
 
 def paths_labels(pairs):
@@ -139,13 +140,16 @@ class FullProtocol(object):
         if self.dataset.COLOR:
             ndim, mode, shape = (3, 'RGB', (x_height, x_width, 3))
         else:
-            ndim, mode, shape = (2, 'L', (x_height, x_width))
+            ndim, mode, shape = (3, 'L', (x_height, x_width, 1))
         loader = ImgLoader(ndim=ndim, dtype=x_dtype, mode=mode, shape=shape)
 
         self.image_pixels = lmap(loader, self.image_paths)
         self.paths_labels_dev_train = paths_labels_dev_train
         self.paths_labels_dev_test = paths_labels_dev_test
         self.paths_labels_view2 = paths_labels_view2
+
+        assert str(self.image_pixels[0].dtype) == x_dtype
+        assert self.image_pixels[0].ndim == 3
 
     def protocol(self, algo):
         for dummy in self.protocol_iter(algo):
@@ -165,6 +169,9 @@ class FullProtocol(object):
             train=task(self.dev_train[0], name='devTrain'),
             valid=task(self.dev_test[0], name='devTest'),
             )
+
+        algo.forget_task('devTrain')
+        algo.forget_task('devTest')
 
         yield ('model validation complete', model)
 
@@ -190,6 +197,8 @@ class FullProtocol(object):
                 test_task_name=v2i_tst.name,
                 test_error_rate=v2_losses[-1],
                 ))
+            algo.forget_task('view2_test_%i' % i)
+            algo.forget_task('view2_train_%i' % i)
         algo.generalization_error = np.mean(v2_losses)
 
         yield 'model testing complete'

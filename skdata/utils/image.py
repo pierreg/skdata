@@ -5,7 +5,7 @@ logger = logging.getLogger(__name__)
 
 try:
     from PIL import Image
-    from scipy.misc import imresize, fromimage
+    from scipy.misc import fromimage
 except ImportError:
     logger.warn("The Python Imaging Library (PIL)"
             " is required to load data from jpeg files.")
@@ -45,9 +45,18 @@ class ImgLoader(object):
         else:
             rval = [None] * len(file_paths)
         for ii, file_path in enumerate(file_paths):
-            rval[ii] = np.asarray(
-                imread(file_path, mode=self.mode),
-                dtype='uint8')
+            im_ii = imread(file_path, mode=self.mode)
+            if len(im_ii.shape) not in (2, 3):
+                raise IOError('Failed to decode %s' % file_path)
+            img_ii = np.asarray(im_ii, dtype='uint8')
+            assert len(img_ii.shape) in (2, 3)
+            # -- broadcast pixels over channels if channels have been
+            #    requested (_shape has len 3) and are not present
+            #    (img_ii.ndim == 2)
+            if img_ii.ndim == 2 and rval.ndim == 4:
+                rval[ii] =  img_ii[:, :, np.newaxis]
+            else:
+                rval[ii] =  img_ii
         rval = rval.astype(self._dtype)
         if 'float' in str(self._dtype):
             rval /= 255.0
