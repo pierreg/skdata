@@ -57,7 +57,7 @@ class ImgLoader(object):
                 rval[ii] =  img_ii[:, :, np.newaxis]
             else:
                 rval[ii] =  img_ii
-        rval = rval.astype(self._dtype)
+        rval = np.array(rval).astype(self._dtype)
         if 'float' in str(self._dtype):
             rval /= 255.0
         return rval

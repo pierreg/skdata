@@ -165,7 +165,7 @@ class PubFig83(object):
     # ------------------------------------------------------------------------
 
     def image_path(self, m):
-        return self.home('pubfig83', m['name'], m['jpgfile'])
+        return self.home('pubfig83', m['name'], m['filename'])
 
     # ------------------------------------------------------------------------
     # -- Standard Tasks
