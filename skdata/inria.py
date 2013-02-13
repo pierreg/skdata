@@ -166,9 +166,12 @@ class INRIAPerson(object):
                       if path.isdir(path.join(base_dirname, basename))])
 
 
-        img_pattern_trn = path.join(dirs['Train'], "*/*.png")
-        img_pattern_tst = path.join(dirs['Test'], "*/*.png")
-        img_filenames = sorted(glob(img_pattern_trn) + glob(img_pattern_tst))
+        png_pattern_trn = path.join(dirs['Train'], "*/*.png")
+        png_pattern_tst = path.join(dirs['Test'], "*/*.png")
+        jpg_pattern_trn = path.join(dirs['Train'], "*/*.jpg")
+        jpg_pattern_tst = path.join(dirs['Test'], "*/*.jpg")
+        img_filenames = sorted(glob(png_pattern_trn) + glob(png_pattern_tst) +
+                               glob(jpg_pattern_trn) + glob(jpg_pattern_tst))
         n_imgs = len(img_filenames)
 
         # --
